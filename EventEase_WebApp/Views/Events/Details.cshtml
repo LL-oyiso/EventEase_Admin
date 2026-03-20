@@ -1,0 +1,27 @@
+﻿@model EventEase_WebApp.Models.Event
+@{
+    ViewData["Title"] = "Event Details";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="h3 mb-0">@Model.EventName</h1>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.EventId">Edit</a>
+        <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Date</dt>
+            <dd class="col-sm-9">@Model.EventDate.ToString("yyyy-MM-dd")</dd>
+
+            <dt class="col-sm-3">Venue</dt>
+            <dd class="col-sm-9">@(Model.Venue?.VenueName ?? "Unassigned")</dd>
+
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.Description) ? Model.Description : "—")</dd>
+        </dl>
+    </div>
+</div>

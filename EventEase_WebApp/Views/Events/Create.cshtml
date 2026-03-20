@@ -1,0 +1,44 @@
+﻿@model EventEase_WebApp.Models.Event
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<h1 class="h3 mb-3">Create event</h1>
+
+<form asp-action="Create" method="post" class="card">
+    <div class="card-body">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label asp-for="EventName" class="form-label"></label>
+            <input asp-for="EventName" class="form-control" />
+            <span asp-validation-for="EventName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="EventDate" class="form-label"></label>
+            <input asp-for="EventDate" class="form-control" type="date" />
+            <span asp-validation-for="EventDate" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="VenueId" class="form-label">Venue (optional)</label>
+            <select asp-for="VenueId" class="form-select" asp-items="ViewBag.VenueId">
+                <option value="">-- Unassigned --</option>
+            </select>
+            <div class="form-text">Events may be created before a venue becomes available.</div>
+            <span asp-validation-for="VenueId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+        </div>
+    </div>
+</form>

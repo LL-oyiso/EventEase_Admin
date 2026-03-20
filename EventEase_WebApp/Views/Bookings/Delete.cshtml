@@ -1,0 +1,32 @@
+﻿@model EventEase_WebApp.Models.Booking
+@{
+    ViewData["Title"] = "Delete Booking";
+}
+
+<h1 class="h3 mb-3">Delete booking</h1>
+
+<div class="card">
+    <div class="card-body">
+        <div class="alert alert-danger">This action cannot be undone.</div>
+
+        <dl class="row">
+            <dt class="col-sm-3">Reference</dt>
+            <dd class="col-sm-9"><code>@Model.BookingId</code></dd>
+
+            <dt class="col-sm-3">Date</dt>
+            <dd class="col-sm-9">@Model.BookingDate.ToString("yyyy-MM-dd")</dd>
+
+            <dt class="col-sm-3">Venue</dt>
+            <dd class="col-sm-9">@Model.Venue?.VenueName</dd>
+
+            <dt class="col-sm-3">Event</dt>
+            <dd class="col-sm-9">@Model.Event?.EventName</dd>
+        </dl>
+
+        <form asp-action="Delete" method="post" class="d-flex gap-2">
+            <input type="hidden" asp-for="BookingId" />
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+        </form>
+    </div>
+</div>

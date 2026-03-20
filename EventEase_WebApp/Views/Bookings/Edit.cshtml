@@ -1,0 +1,37 @@
+﻿@model EventEase_WebApp.Models.Booking
+@{
+    ViewData["Title"] = "Edit Booking";
+}
+
+<h1 class="h3 mb-3">Edit booking</h1>
+
+<form asp-action="Edit" method="post" class="card">
+    <div class="card-body">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <input type="hidden" asp-for="BookingId" />
+
+        <div class="mb-3">
+            <label asp-for="EventId" class="form-label">Event</label>
+            <select asp-for="EventId" class="form-select" asp-items="ViewBag.EventId"></select>
+            <span asp-validation-for="EventId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="VenueId" class="form-label">Venue</label>
+            <select asp-for="VenueId" class="form-select" asp-items="ViewBag.VenueId"></select>
+            <span asp-validation-for="VenueId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="BookingDate" class="form-label">Booking date</label>
+            <input asp-for="BookingDate" class="form-control" type="date" />
+            <span asp-validation-for="BookingDate" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+        </div>
+    </div>
+</form>
