@@ -1,0 +1,46 @@
+﻿@model EventEase_WebApp.Models.Venue
+@{
+    ViewData["Title"] = "Delete Venue";
+    var hasBookings = (ViewBag.HasBookings as bool?) ?? false;
+}
+
+<h1 class="h3 mb-3">Delete venue</h1>
+
+<div class="card">
+    <div class="card-body">
+        @if (TempData["Error"] is string error && !string.IsNullOrWhiteSpace(error))
+        {
+            <div class="alert alert-danger">@error</div>
+        }
+
+        @if (hasBookings)
+        {
+            <div class="alert alert-warning">
+                This venue cannot be deleted because it is linked to one or more bookings.
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-danger">
+                This action cannot be undone.
+            </div>
+        }
+
+        <dl class="row">
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9">@Model.VenueName</dd>
+
+            <dt class="col-sm-3">Location</dt>
+            <dd class="col-sm-9">@Model.Location</dd>
+
+            <dt class="col-sm-3">Capacity</dt>
+            <dd class="col-sm-9">@Model.Capacity</dd>
+        </dl>
+
+        <form asp-action="Delete" method="post" class="d-flex gap-2">
+            <input type="hidden" asp-for="VenueId" />
+            <button type="submit" class="btn btn-danger" @(hasBookings ? "disabled" : "")>Delete</button>
+            <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+        </form>
+    </div>
+</div>
