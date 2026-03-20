@@ -1,0 +1,28 @@
+﻿@model IEnumerable<EventEase_WebApp.Models.Booking>
+@{
+    ViewData["Title"] = "Bookings";
+}
+
+<h1 class="h3">Bookings</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No bookings yet.</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead><tr><th>Reference</th><th>Date</th><th>VenueId</th><th>EventId</th></tr></thead>
+        <tbody>
+            @foreach (var b in Model)
+            {
+                <tr>
+                    <td><code>@b.BookingId</code></td>
+                    <td>@b.BookingDate.ToString("yyyy-MM-dd")</td>
+                    <td>@b.VenueId</td>
+                    <td>@b.EventId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

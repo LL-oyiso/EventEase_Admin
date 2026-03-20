@@ -1,0 +1,23 @@
+﻿@model IEnumerable<EventEase_WebApp.Models.Event>
+@{
+    ViewData["Title"] = "Events";
+}
+
+<h1 class="h3">Events</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No events yet.</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead><tr><th>Date</th><th>Name</th></tr></thead>
+        <tbody>
+            @foreach (var e in Model)
+            {
+                <tr><td>@e.EventDate.ToString("yyyy-MM-dd")</td><td>@e.EventName</td></tr>
+            }
+        </tbody>
+    </table>
+}

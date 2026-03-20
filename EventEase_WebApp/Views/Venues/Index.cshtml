@@ -1,0 +1,23 @@
+﻿@model IEnumerable<EventEase_WebApp.Models.Venue>
+@{
+    ViewData["Title"] = "Venues";
+}
+
+<h1 class="h3">Venues</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No venues yet.</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead><tr><th>Name</th><th>Location</th><th>Capacity</th></tr></thead>
+        <tbody>
+            @foreach (var v in Model)
+            {
+                <tr><td>@v.VenueName</td><td>@v.Location</td><td>@v.Capacity</td></tr>
+            }
+        </tbody>
+    </table>
+}
