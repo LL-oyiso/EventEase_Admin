@@ -1,6 +1,7 @@
-﻿@model IEnumerable<EventEase_WebApp.Models.Booking>
+@model IEnumerable<EventEase_WebApp.Models.BookingDetail>
 @{
     ViewData["Title"] = "Bookings";
+    var searchTerm = ViewBag.SearchTerm as string;
 }
 
 <div class="d-flex align-items-center justify-content-between mb-3">
@@ -8,9 +9,32 @@
     <a class="btn btn-primary" asp-action="Create">Capture booking</a>
 </div>
 
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-md-8">
+        <input type="text"
+               name="searchTerm"
+               value="@searchTerm"
+               class="form-control"
+               placeholder="Search by booking reference (GUID) or event name" />
+    </div>
+    <div class="col-md-auto d-flex gap-2">
+        <button type="submit" class="btn btn-outline-primary">Search</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+    </div>
+</form>
+
 @if (!Model.Any())
 {
-    <div class="alert alert-info">No bookings yet.</div>
+    <div class="alert alert-info">
+        @if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            <span>No bookings found for your search.</span>
+        }
+        else
+        {
+            <span>No bookings yet.</span>
+        }
+    </div>
 }
 else
 {
@@ -19,8 +43,10 @@ else
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Venue</th>
                     <th>Event</th>
+                    <th>Event Date</th>
+                    <th>Venue</th>
+                    <th>Location</th>
                     <th>Reference</th>
                     <th style="width: 240px;"></th>
                 </tr>
@@ -30,8 +56,10 @@ else
                 {
                     <tr>
                         <td class="text-nowrap">@b.BookingDate.ToString("yyyy-MM-dd")</td>
-                        <td class="fw-semibold">@b.Venue?.VenueName</td>
-                        <td>@b.Event?.EventName</td>
+                        <td class="fw-semibold">@b.EventName</td>
+                        <td class="text-nowrap">@b.EventDate.ToString("yyyy-MM-dd")</td>
+                        <td>@b.VenueName</td>
+                        <td>@b.VenueLocation</td>
                         <td><code>@b.BookingId</code></td>
                         <td class="text-end">
                             <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@b.BookingId">Details</a>

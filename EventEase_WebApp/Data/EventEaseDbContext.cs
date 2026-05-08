@@ -1,4 +1,4 @@
-﻿
+
 using Microsoft.EntityFrameworkCore;
 using EventEase_WebApp.Models;
 
@@ -11,6 +11,7 @@ public class EventEaseDbContext : DbContext
     public DbSet<Venue> Venues => Set<Venue>();
     public DbSet<Event> Events => Set<Event>();
     public DbSet<Booking> Bookings => Set<Booking>();
+    public DbSet<BookingDetail> BookingDetails => Set<BookingDetail>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -45,5 +46,9 @@ public class EventEaseDbContext : DbContext
         modelBuilder.Entity<Booking>()
             .HasIndex(b => new { b.VenueId, b.BookingDate })
             .IsUnique();
+
+        modelBuilder.Entity<BookingDetail>()
+            .HasNoKey()
+            .ToView("vwBookingDetails");
     }
 }

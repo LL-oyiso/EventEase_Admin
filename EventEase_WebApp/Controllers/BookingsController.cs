@@ -16,15 +16,32 @@ public class BookingsController : Controller
     }
 
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string? searchTerm)
     {
-        var bookings = await _db.Bookings
-            .AsNoTracking()
-            .Include(b => b.Venue)
-            .Include(b => b.Event)
+        var normalizedSearch = searchTerm?.Trim();
+        var query = _db.BookingDetails.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(normalizedSearch))
+        {
+            var searchLike = $"%{normalizedSearch}%";
+            if (Guid.TryParse(normalizedSearch, out var bookingId))
+            {
+                query = query.Where(b =>
+                    b.BookingId == bookingId ||
+                    EF.Functions.Like(b.EventName, searchLike));
+            }
+            else
+            {
+                query = query.Where(b => EF.Functions.Like(b.EventName, searchLike));
+            }
+        }
+
+        var bookings = await query
             .OrderByDescending(b => b.BookingDate)
+            .ThenBy(b => b.EventName)
             .ToListAsync();
 
+        ViewBag.SearchTerm = normalizedSearch;
         return View(bookings);
     }
 
