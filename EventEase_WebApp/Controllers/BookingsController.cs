@@ -1,4 +1,4 @@
-﻿using EventEase_WebApp.Data;
+using EventEase_WebApp.Data;
 using EventEase_WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -77,6 +77,7 @@ public class BookingsController : Controller
             return View(booking);
         }
 
+        TempData["Success"] = $"Booking captured. Reference: {booking.BookingId}";
         return RedirectToAction(nameof(Index));
     }
 
@@ -125,6 +126,7 @@ public class BookingsController : Controller
             return View(booking);
         }
 
+        TempData["Success"] = "Booking updated.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -152,6 +154,7 @@ public class BookingsController : Controller
 
         _db.Bookings.Remove(booking);
         await _db.SaveChangesAsync();
+        TempData["Success"] = "Booking deleted.";
 
         return RedirectToAction(nameof(Index));
     }

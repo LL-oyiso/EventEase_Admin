@@ -24,9 +24,22 @@
     </nav>
 
     <main class="container py-4">
+
+        @if (TempData["Success"] is string success && !string.IsNullOrWhiteSpace(success))
+        {
+            <div class="alert alert-success">@success</div>
+        }
+        @if (TempData["Error"] is string error && !string.IsNullOrWhiteSpace(error))
+        {
+            <div class="alert alert-danger">@error</div>
+        }
+
+
         @RenderBody()
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -1,4 +1,4 @@
-﻿@model EventEase_WebApp.Models.Venue
+@model EventEase_WebApp.Models.Venue
 @{
     ViewData["Title"] = "Venue Details";
 }
@@ -13,6 +13,9 @@
 
 <div class="card">
     <div class="card-body">
+        <div class="mb-3">
+            <img src="@Model.ImageUrl" alt="@Model.VenueName image" class="img-fluid rounded border" style="max-height: 280px; object-fit: cover;" />
+        </div>
         <dl class="row mb-0">
             <dt class="col-sm-3">Location</dt>
             <dd class="col-sm-9">@Model.Location</dd>
@@ -21,7 +24,7 @@
             <dd class="col-sm-9">@Model.Capacity</dd>
 
             <dt class="col-sm-3">Image URL</dt>
-            <dd class="col-sm-9"><code>@Model.ImageUrl</code></dd>
+            <dd class="col-sm-9"><small class="text-muted">@Model.ImageUrl</small></dd>
         </dl>
     </div>
 </div>

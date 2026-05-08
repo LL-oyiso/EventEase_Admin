@@ -1,4 +1,4 @@
-﻿@model EventEase_WebApp.Models.Venue
+@model EventEase_WebApp.Models.Venue
 @{
     ViewData["Title"] = "Delete Venue";
     var hasBookings = (ViewBag.HasBookings as bool?) ?? false;
@@ -27,6 +27,11 @@
         }
 
         <dl class="row">
+            <dt class="col-sm-3">Image</dt>
+            <dd class="col-sm-9">
+                <img src="@Model.ImageUrl" alt="@Model.VenueName image" class="img-thumbnail" style="max-height: 180px;" />
+            </dd>
+
             <dt class="col-sm-3">Name</dt>
             <dd class="col-sm-9">@Model.VenueName</dd>
 

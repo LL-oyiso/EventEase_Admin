@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 
 namespace EventEase_WebApp.Models;
 
@@ -18,6 +20,9 @@ public class Venue
 
     [Required, StringLength(500), Url]
     public string ImageUrl { get; set; } = "https://placehold.co/600x400?text=Venue";
+
+    [NotMapped]
+    public IFormFile? ImageFile { get; set; }
 
     // Navigation (needed for EF relationships in DbContext)
     public List<Event> Events { get; set; } = new();

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EventEase_WebApp.Models.Event>
+@model IEnumerable<EventEase_WebApp.Models.Event>
 @{
     ViewData["Title"] = "Events";
 }
@@ -18,6 +18,7 @@ else
         <table class="table table-striped align-middle">
             <thead>
                 <tr>
+                    <th>Image</th>
                     <th>Date</th>
                     <th>Name</th>
                     <th>Venue</th>
@@ -28,6 +29,7 @@ else
                 @foreach (var e in Model)
                 {
                     <tr>
+                        <td><img src="@e.ImageUrl" alt="@e.EventName image" class="rounded border" style="width: 72px; height: 48px; object-fit: cover;" /></td>
                         <td class="text-nowrap">@e.EventDate.ToString("yyyy-MM-dd")</td>
                         <td class="fw-semibold">@e.EventName</td>
                         <td>@(e.Venue?.VenueName ?? "Unassigned")</td>
