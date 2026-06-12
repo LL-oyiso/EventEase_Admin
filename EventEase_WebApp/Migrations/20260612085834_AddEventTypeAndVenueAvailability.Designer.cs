@@ -4,6 +4,7 @@ using EventEase_WebApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventEase_WebApp.Migrations
 {
     [DbContext(typeof(EventEaseDbContext))]
-    partial class EventEaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260612085834_AddEventTypeAndVenueAvailability")]
+    partial class AddEventTypeAndVenueAvailability
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +47,7 @@ namespace EventEase_WebApp.Migrations
                     b.HasIndex("VenueId", "BookingDate")
                         .IsUnique();
 
-                    b.ToTable("Bookings", (string)null);
+                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("EventEase_WebApp.Models.BookingDetail", b =>
@@ -128,7 +131,7 @@ namespace EventEase_WebApp.Migrations
 
                     b.HasIndex("VenueId");
 
-                    b.ToTable("Events", (string)null);
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("EventEase_WebApp.Models.EventType", b =>
@@ -149,7 +152,7 @@ namespace EventEase_WebApp.Migrations
                     b.HasIndex("EventTypeName")
                         .IsUnique();
 
-                    b.ToTable("EventTypes", (string)null);
+                    b.ToTable("EventTypes");
 
                     b.HasData(
                         new
@@ -217,7 +220,7 @@ namespace EventEase_WebApp.Migrations
 
                     b.HasKey("VenueId");
 
-                    b.ToTable("Venues", (string)null);
+                    b.ToTable("Venues");
                 });
 
             modelBuilder.Entity("EventEase_WebApp.Models.Booking", b =>

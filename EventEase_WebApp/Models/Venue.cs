@@ -18,6 +18,8 @@ public class Venue
     [Range(1, 250000)]
     public int Capacity { get; set; }
 
+    public bool IsAvailable { get; set; } = true;
+
     [Required, StringLength(500), Url]
     public string ImageUrl { get; set; } = "https://placehold.co/600x400?text=Venue";
 
