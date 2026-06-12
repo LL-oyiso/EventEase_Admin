@@ -2,6 +2,11 @@
 @{
     ViewData["Title"] = "Bookings";
     var searchTerm = ViewBag.SearchTerm as string;
+    var fromDate = ViewBag.FromDate as DateTime?;
+    var toDate = ViewBag.ToDate as DateTime?;
+    var venueAvailability = ViewBag.VenueAvailability as string ?? "all";
+    var eventTypes = ViewBag.EventTypes as Microsoft.AspNetCore.Mvc.Rendering.SelectList;
+    var hasFilters = (ViewBag.HasFilters as bool?) ?? false;
 }
 
 <div class="d-flex align-items-center justify-content-between mb-3">
@@ -10,15 +15,69 @@
 </div>
 
 <form asp-action="Index" method="get" class="row g-2 mb-3">
-    <div class="col-md-8">
+    <div class="col-md-4">
         <input type="text"
                name="searchTerm"
                value="@searchTerm"
                class="form-control"
                placeholder="Search by booking reference (GUID) or event name" />
     </div>
-    <div class="col-md-auto d-flex gap-2">
-        <button type="submit" class="btn btn-outline-primary">Search</button>
+
+    <div class="col-md-2">
+        <select name="eventTypeId" class="form-select" asp-items="eventTypes">
+            <option value="">All event types</option>
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <input type="date"
+               name="fromDate"
+               value="@(fromDate?.ToString("yyyy-MM-dd"))"
+               class="form-control"
+               title="From booking date" />
+    </div>
+
+    <div class="col-md-2">
+        <input type="date"
+               name="toDate"
+               value="@(toDate?.ToString("yyyy-MM-dd"))"
+               class="form-control"
+               title="To booking date" />
+    </div>
+
+    <div class="col-md-2">
+        <select name="venueAvailability" class="form-select">
+            @if (venueAvailability == "all")
+            {
+                <option value="all" selected>All venues</option>
+            }
+            else
+            {
+                <option value="all">All venues</option>
+            }
+
+            @if (venueAvailability == "available")
+            {
+                <option value="available" selected>Available only</option>
+            }
+            else
+            {
+                <option value="available">Available only</option>
+            }
+
+            @if (venueAvailability == "unavailable")
+            {
+                <option value="unavailable" selected>Unavailable only</option>
+            }
+            else
+            {
+                <option value="unavailable">Unavailable only</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-12 d-flex gap-2">
+        <button type="submit" class="btn btn-outline-primary">Apply filters</button>
         <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
     </div>
 </form>
@@ -26,9 +85,9 @@
 @if (!Model.Any())
 {
     <div class="alert alert-info">
-        @if (!string.IsNullOrWhiteSpace(searchTerm))
+        @if (hasFilters)
         {
-            <span>No bookings found for your search.</span>
+            <span>No bookings found for the selected filters.</span>
         }
         else
         {
@@ -44,8 +103,10 @@ else
                 <tr>
                     <th>Date</th>
                     <th>Event</th>
+                    <th>Event Type</th>
                     <th>Event Date</th>
                     <th>Venue</th>
+                    <th>Venue Availability</th>
                     <th>Location</th>
                     <th>Reference</th>
                     <th style="width: 240px;"></th>
@@ -57,8 +118,10 @@ else
                     <tr>
                         <td class="text-nowrap">@b.BookingDate.ToString("yyyy-MM-dd")</td>
                         <td class="fw-semibold">@b.EventName</td>
+                        <td>@b.EventTypeName</td>
                         <td class="text-nowrap">@b.EventDate.ToString("yyyy-MM-dd")</td>
                         <td>@b.VenueName</td>
+                        <td>@(b.VenueIsAvailable ? "Available" : "Unavailable")</td>
                         <td>@b.VenueLocation</td>
                         <td><code>@b.BookingId</code></td>
                         <td class="text-end">

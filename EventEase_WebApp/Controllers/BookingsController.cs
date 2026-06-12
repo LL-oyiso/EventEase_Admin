@@ -16,9 +16,27 @@ public class BookingsController : Controller
     }
 
 
-    public async Task<IActionResult> Index(string? searchTerm)
+    public async Task<IActionResult> Index(
+        string? searchTerm,
+        int? eventTypeId,
+        DateTime? fromDate,
+        DateTime? toDate,
+        string? venueAvailability)
     {
         var normalizedSearch = searchTerm?.Trim();
+        var normalizedAvailability = string.IsNullOrWhiteSpace(venueAvailability)
+            ? "all"
+            : venueAvailability.Trim().ToLowerInvariant();
+        if (normalizedAvailability is not ("all" or "available" or "unavailable"))
+        {
+            normalizedAvailability = "all";
+        }
+
+        if (fromDate.HasValue && toDate.HasValue && fromDate.Value.Date > toDate.Value.Date)
+        {
+            (fromDate, toDate) = (toDate, fromDate);
+        }
+
         var query = _db.BookingDetails.AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(normalizedSearch))
@@ -36,12 +54,53 @@ public class BookingsController : Controller
             }
         }
 
+        if (eventTypeId.HasValue)
+        {
+            query = query.Where(b => b.EventTypeId == eventTypeId.Value);
+        }
+
+        if (fromDate.HasValue)
+        {
+            var from = fromDate.Value.Date;
+            query = query.Where(b => b.BookingDate >= from);
+        }
+
+        if (toDate.HasValue)
+        {
+            var to = toDate.Value.Date;
+            query = query.Where(b => b.BookingDate <= to);
+        }
+
+        if (normalizedAvailability == "available")
+        {
+            query = query.Where(b => b.VenueIsAvailable);
+        }
+        else if (normalizedAvailability == "unavailable")
+        {
+            query = query.Where(b => !b.VenueIsAvailable);
+        }
+
         var bookings = await query
             .OrderByDescending(b => b.BookingDate)
             .ThenBy(b => b.EventName)
             .ToListAsync();
 
+        var eventTypes = await _db.EventTypes
+            .AsNoTracking()
+            .OrderBy(et => et.EventTypeName)
+            .ToListAsync();
+
         ViewBag.SearchTerm = normalizedSearch;
+        ViewBag.EventTypeId = eventTypeId;
+        ViewBag.FromDate = fromDate;
+        ViewBag.ToDate = toDate;
+        ViewBag.VenueAvailability = normalizedAvailability;
+        ViewBag.EventTypes = new SelectList(eventTypes, nameof(EventType.EventTypeId), nameof(EventType.EventTypeName), eventTypeId);
+        ViewBag.HasFilters = !string.IsNullOrWhiteSpace(normalizedSearch)
+            || eventTypeId.HasValue
+            || fromDate.HasValue
+            || toDate.HasValue
+            || normalizedAvailability != "all";
         return View(bookings);
     }
 
