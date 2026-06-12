@@ -1,15 +1,157 @@
-﻿@{
-    ViewData["Title"] = "Home";
+﻿@model EventEase_WebApp.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    var trendMax = Math.Max(1, Model.MonthlyBookingTrend.Any() ? Model.MonthlyBookingTrend.Max(x => x.BookingCount) : 1);
 }
 
-<div class="card">
-    <div class="card-body p-4 p-lg-5">
-        <h1 class="mb-2">EventEase Admin</h1>
-        <p class="text-secondary mb-4">Manage venues, events, and bookings from one place.</p>
-        <div class="d-flex flex-wrap gap-2">
-            <a class="btn btn-primary" asp-controller="Bookings" asp-action="Create">Capture booking</a>
-            <a class="btn btn-outline-primary" asp-controller="Events" asp-action="Create">Create event</a>
-            <a class="btn btn-outline-secondary" asp-controller="Venues" asp-action="Create">Create venue</a>
-        </div>
+<div class="dashboard-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-1">Dashboard</h1>
+        <p class="text-secondary mb-0">Overview of events, bookings, and venue status.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-primary" asp-controller="Bookings" asp-action="Create">Capture booking</a>
+        <a class="btn btn-outline-primary" asp-controller="Events" asp-action="Create">Create event</a>
+        <a class="btn btn-outline-secondary" asp-controller="Venues" asp-action="Create">Create venue</a>
     </div>
 </div>
+
+<section class="stats-grid mb-4">
+    <article class="stat-card stat-amber">
+        <small>Total Events</small>
+        <h3>@Model.TotalEvents</h3>
+        <span>@Model.UnclassifiedEventsCount unclassified</span>
+    </article>
+    <article class="stat-card stat-blue">
+        <small>Upcoming Events</small>
+        <h3>@Model.UpcomingEventsCount</h3>
+        <span>Scheduled from today onward</span>
+    </article>
+    <article class="stat-card stat-green">
+        <small>Total Bookings</small>
+        <h3>@Model.TotalBookings</h3>
+        <span>Across all venues</span>
+    </article>
+    <article class="stat-card stat-rose">
+        <small>Unavailable Venues</small>
+        <h3>@Model.UnavailableVenuesCount</h3>
+        <span>Marked unavailable</span>
+    </article>
+</section>
+
+<section class="dashboard-panels mb-4">
+    <article class="card dashboard-card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Booking Activity (6 months)</h2>
+                <span class="badge text-bg-light">Monthly</span>
+            </div>
+            <div class="trend-chart">
+                @foreach (var point in Model.MonthlyBookingTrend)
+                {
+                    var height = (int)Math.Round((double)point.BookingCount * 100 / trendMax);
+                    if (point.BookingCount > 0 && height < 12)
+                    {
+                        height = 12;
+                    }
+                    <div class="trend-col">
+                        <div class="trend-bar" style="height:@height%"></div>
+                        <span class="trend-label">@point.Label</span>
+                        <small class="trend-value">@point.BookingCount</small>
+                    </div>
+                }
+            </div>
+        </div>
+    </article>
+
+    <article class="card dashboard-card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Event Types</h2>
+                <span class="badge text-bg-light">Distribution</span>
+            </div>
+            @if (!Model.EventTypeBreakdown.Any())
+            {
+                <p class="text-secondary mb-0">No events captured yet.</p>
+            }
+            else
+            {
+                @foreach (var item in Model.EventTypeBreakdown)
+                {
+                    <div class="type-row">
+                        <div class="d-flex justify-content-between">
+                            <span>@item.Name</span>
+                            <span>@item.Percentage%</span>
+                        </div>
+                        <div class="progress" role="progressbar" aria-label="@item.Name share">
+                            <div class="progress-bar" style="width:@item.Percentage%"></div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </article>
+</section>
+
+<section class="dashboard-panels">
+    <article class="card dashboard-card">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Upcoming Events</h2>
+            @if (!Model.UpcomingEvents.Any())
+            {
+                <p class="text-secondary mb-0">No upcoming events found.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Event</th>
+                                <th>Date</th>
+                                <th>Location</th>
+                                <th class="text-end">Bookings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in Model.UpcomingEvents)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@row.EventName</td>
+                                    <td>@row.EventDate.ToString("yyyy-MM-dd")</td>
+                                    <td>@row.Location</td>
+                                    <td class="text-end">@row.BookingCount</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </article>
+
+    <article class="card dashboard-card">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Top Events</h2>
+            @if (!Model.TopEvents.Any())
+            {
+                <p class="text-secondary mb-0">No event activity yet.</p>
+            }
+            else
+            {
+                <div class="event-list">
+                    @foreach (var item in Model.TopEvents)
+                    {
+                        <div class="event-list-item">
+                            <div>
+                                <p class="mb-0 fw-semibold">@item.EventName</p>
+                                <small class="text-secondary">@item.EventTypeName - @item.EventDate.ToString("yyyy-MM-dd")</small>
+                            </div>
+                            <span class="badge text-bg-light">@item.BookingCount bookings</span>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </article>
+</section>
