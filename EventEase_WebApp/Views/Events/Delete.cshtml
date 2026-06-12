@@ -38,6 +38,9 @@
             <dt class="col-sm-3">Date</dt>
             <dd class="col-sm-9">@Model.EventDate.ToString("yyyy-MM-dd")</dd>
 
+            <dt class="col-sm-3">Event Type</dt>
+            <dd class="col-sm-9">@(Model.EventType?.EventTypeName ?? "Unclassified")</dd>
+
             <dt class="col-sm-3">Venue</dt>
             <dd class="col-sm-9">@(Model.Venue?.VenueName ?? "Unassigned")</dd>
         </dl>

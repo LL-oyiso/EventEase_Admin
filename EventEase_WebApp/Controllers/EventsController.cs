@@ -26,6 +26,7 @@ public class EventsController : Controller
         var eventsList = await _db.Events
             .AsNoTracking()
             .Include(e => e.Venue)
+            .Include(e => e.EventType)
             .OrderByDescending(e => e.EventDate)
             .ThenBy(e => e.EventName)
             .ToListAsync();
@@ -41,6 +42,7 @@ public class EventsController : Controller
         var ev = await _db.Events
             .AsNoTracking()
             .Include(e => e.Venue)
+            .Include(e => e.EventType)
             .FirstOrDefaultAsync(e => e.EventId == id.Value);
 
         if (ev is null) return NotFound();
@@ -50,6 +52,7 @@ public class EventsController : Controller
     public async Task<IActionResult> Create()
     {
         await PopulateVenuesDropDownList(null);
+        await PopulateEventTypesDropDownList(null);
         return View(new Event { EventDate = DateTime.Today });
     }
 
@@ -62,6 +65,7 @@ public class EventsController : Controller
         if (!ModelState.IsValid)
         {
             await PopulateVenuesDropDownList(ev.VenueId);
+            await PopulateEventTypesDropDownList(ev.EventTypeId);
             return View(ev);
         }
 
@@ -75,6 +79,7 @@ public class EventsController : Controller
         {
             ModelState.AddModelError(string.Empty, ex.Message);
             await PopulateVenuesDropDownList(ev.VenueId);
+            await PopulateEventTypesDropDownList(ev.EventTypeId);
             return View(ev);
         }
 
@@ -91,6 +96,7 @@ public class EventsController : Controller
         if (ev is null) return NotFound();
 
         await PopulateVenuesDropDownList(ev.VenueId);
+        await PopulateEventTypesDropDownList(ev.EventTypeId);
         return View(ev);
     }
 
@@ -104,6 +110,7 @@ public class EventsController : Controller
         if (!ModelState.IsValid)
         {
             await PopulateVenuesDropDownList(ev.VenueId);
+            await PopulateEventTypesDropDownList(ev.EventTypeId);
 
             return View(ev);
         }
@@ -125,6 +132,7 @@ public class EventsController : Controller
             existingEvent.EventDate = ev.EventDate;
             existingEvent.Description = ev.Description;
             existingEvent.VenueId = ev.VenueId;
+            existingEvent.EventTypeId = ev.EventTypeId;
             await _db.SaveChangesAsync();
 
             if (!string.IsNullOrWhiteSpace(oldImageUrl))
@@ -143,6 +151,7 @@ public class EventsController : Controller
             ModelState.AddModelError(string.Empty, ex.Message);
             ev.ImageUrl = existingEvent.ImageUrl;
             await PopulateVenuesDropDownList(ev.VenueId);
+            await PopulateEventTypesDropDownList(ev.EventTypeId);
             return View(ev);
         }
 
@@ -157,6 +166,7 @@ public class EventsController : Controller
         var ev = await _db.Events
             .AsNoTracking()
             .Include(e => e.Venue)
+            .Include(e => e.EventType)
             .FirstOrDefaultAsync(e => e.EventId == id.Value);
 
         if (ev is null) return NotFound();
@@ -199,6 +209,16 @@ public class EventsController : Controller
             .ToListAsync();
 
         ViewBag.VenueId = new SelectList(venues, nameof(Venue.VenueId), nameof(Venue.VenueName), selectedVenueId);
+    }
+
+    private async Task PopulateEventTypesDropDownList(int? selectedEventTypeId)
+    {
+        var eventTypes = await _db.EventTypes
+            .AsNoTracking()
+            .OrderBy(et => et.EventTypeName)
+            .ToListAsync();
+
+        ViewBag.EventTypeId = new SelectList(eventTypes, nameof(EventType.EventTypeId), nameof(EventType.EventTypeName), selectedEventTypeId);
     }
 
     private void ValidateImageFile(IFormFile? imageFile, bool isCreate)

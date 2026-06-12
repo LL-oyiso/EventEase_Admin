@@ -40,6 +40,9 @@
 
             <dt class="col-sm-3">Capacity</dt>
             <dd class="col-sm-9">@Model.Capacity</dd>
+
+            <dt class="col-sm-3">Availability</dt>
+            <dd class="col-sm-9">@(Model.IsAvailable ? "Available" : "Unavailable")</dd>
         </dl>
 
         <form asp-action="Delete" method="post" class="d-flex gap-2">

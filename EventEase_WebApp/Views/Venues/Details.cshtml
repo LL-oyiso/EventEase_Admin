@@ -23,6 +23,9 @@
             <dt class="col-sm-3">Capacity</dt>
             <dd class="col-sm-9">@Model.Capacity</dd>
 
+            <dt class="col-sm-3">Availability</dt>
+            <dd class="col-sm-9">@(Model.IsAvailable ? "Available" : "Unavailable")</dd>
+
             <dt class="col-sm-3">Image URL</dt>
             <dd class="col-sm-9"><small class="text-muted">@Model.ImageUrl</small></dd>
         </dl>

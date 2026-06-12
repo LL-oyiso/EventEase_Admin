@@ -21,6 +21,7 @@ else
                     <th>Image</th>
                     <th>Name</th>
                     <th>Location</th>
+                    <th>Availability</th>
                     <th class="text-end">Capacity</th>
                     <th style="width: 240px;"></th>
                 </tr>
@@ -32,6 +33,7 @@ else
                         <td><img src="@v.ImageUrl" alt="@v.VenueName image" class="rounded border" style="width: 72px; height: 48px; object-fit: cover;" /></td>
                         <td class="fw-semibold">@v.VenueName</td>
                         <td>@v.Location</td>
+                        <td>@(v.IsAvailable ? "Available" : "Unavailable")</td>
                         <td class="text-end">@v.Capacity</td>
                         <td class="text-end">
                             <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@v.VenueId">Details</a>

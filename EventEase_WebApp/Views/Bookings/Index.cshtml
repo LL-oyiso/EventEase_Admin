@@ -14,9 +14,11 @@
     <a class="btn btn-primary" asp-action="Create">Capture booking</a>
 </div>
 
-<form asp-action="Index" method="get" class="row g-2 mb-3">
+<form asp-action="Index" method="get" class="row g-2 align-items-end mb-3">
     <div class="col-md-4">
+        <label for="searchTerm" class="form-label small text-muted mb-1">Search</label>
         <input type="text"
+               id="searchTerm"
                name="searchTerm"
                value="@searchTerm"
                class="form-control"
@@ -24,13 +26,16 @@
     </div>
 
     <div class="col-md-2">
-        <select name="eventTypeId" class="form-select" asp-items="eventTypes">
+        <label for="eventTypeId" class="form-label small text-muted mb-1">Event type</label>
+        <select id="eventTypeId" name="eventTypeId" class="form-select" asp-items="eventTypes">
             <option value="">All event types</option>
         </select>
     </div>
 
     <div class="col-md-2">
+        <label for="fromDate" class="form-label small text-muted mb-1">From date</label>
         <input type="date"
+               id="fromDate"
                name="fromDate"
                value="@(fromDate?.ToString("yyyy-MM-dd"))"
                class="form-control"
@@ -38,7 +43,9 @@
     </div>
 
     <div class="col-md-2">
+        <label for="toDate" class="form-label small text-muted mb-1">To date</label>
         <input type="date"
+               id="toDate"
                name="toDate"
                value="@(toDate?.ToString("yyyy-MM-dd"))"
                class="form-control"
@@ -46,7 +53,8 @@
     </div>
 
     <div class="col-md-2">
-        <select name="venueAvailability" class="form-select">
+        <label for="venueAvailability" class="form-label small text-muted mb-1">Venue status</label>
+        <select id="venueAvailability" name="venueAvailability" class="form-select">
             @if (venueAvailability == "all")
             {
                 <option value="all" selected>All venues</option>

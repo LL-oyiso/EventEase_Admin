@@ -112,6 +112,7 @@ public class VenuesController : Controller
             existingVenue.VenueName = venue.VenueName;
             existingVenue.Location = venue.Location;
             existingVenue.Capacity = venue.Capacity;
+            existingVenue.IsAvailable = venue.IsAvailable;
             await _db.SaveChangesAsync();
 
             if (!string.IsNullOrWhiteSpace(oldImageUrl))

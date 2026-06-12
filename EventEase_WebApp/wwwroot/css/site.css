@@ -1,31 +1,141 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+:root {
+  --app-bg: #f3f6fb;
+  --app-text: #172033;
+  --app-surface: #ffffff;
+  --app-border: #e2e8f0;
 }
 
 html {
-  position: relative;
+  font-size: 16px;
   min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+  min-height: 100vh;
+  background: radial-gradient(circle at top right, #e0ecff 0%, #f3f6fb 30%, #f3f6fb 100%);
+  color: var(--app-text);
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+.app-navbar {
+  background: linear-gradient(120deg, #0f172a, #1d2a44);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.navbar .nav-link {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  color: #fff;
+}
+
+.page-shell {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.card {
+  border: 1px solid var(--app-border);
+  border-radius: 0.9rem;
+  background-color: var(--app-surface);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.table {
+  --bs-table-bg: transparent;
+}
+
+.table > :not(caption) > * > * {
+  padding: 0.8rem 0.7rem;
+}
+
+.table thead th {
+  font-size: 0.84rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #334155;
+  border-bottom-width: 1px;
+  border-bottom-color: var(--app-border);
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  --bs-table-bg-type: #f8fafc;
+}
+
+.btn {
+  border-radius: 0.6rem;
+  font-weight: 500;
+}
+
+.form-control,
+.form-select {
+  border-radius: 0.6rem;
+  border-color: #cfd8e3;
+}
+
+.form-control:focus,
+.form-select:focus,
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.18rem rgba(59, 130, 246, 0.18);
+}
+
+.alert {
+  margin-bottom: 1rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+}
+
+.alert-success,
+.alert-danger,
+.alert-warning,
+.alert-info {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.alert-success {
+  color: #198754;
+}
+
+.alert-danger {
+  color: #dc3545;
+}
+
+.alert-warning {
+  color: #b45309;
+}
+
+.alert-info {
+  color: #0d6efd;
+}
+
+.validation-summary-errors {
+  color: #dc3545;
+}
+
+.validation-summary-errors ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+code {
+  color: #be185d;
 }
